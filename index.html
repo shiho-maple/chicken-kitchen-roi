@@ -56,35 +56,6 @@
       max-width: 560px;
     }
 
-    /* Mode toggle */
-    .mode-toggle {
-      display: flex;
-      gap: 0;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 10px;
-      overflow: hidden;
-      width: fit-content;
-      background: #fff;
-      margin-bottom: 28px;
-    }
-
-    .mode-toggle button {
-      border: none;
-      background: transparent;
-      padding: 9px 20px;
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      cursor: pointer;
-      color: #6B7280;
-      transition: all 0.15s;
-    }
-
-    .mode-toggle button.active {
-      background: #4B5EFF;
-      color: #fff;
-    }
-
     /* Panels */
     .panel {
       background: #fff;
@@ -242,11 +213,6 @@
     <h1>ROI Calculator — <span>How Much Are Missed<br>Calls Costing You?</span></h1>
     <p class="subtitle">Adjust the sliders to model your locations. Assumptions are based on the April 2026 mystery-shopper audit and fast-casual industry benchmarks.</p>
 
-    <div class="mode-toggle" id="modeToggle">
-      <button class="active" onclick="setMode('pilot')">Pilot &nbsp;(3–5 locations)</button>
-      <button onclick="setMode('full')">Full rollout &nbsp;(29 locations)</button>
-    </div>
-
     <div class="panel">
       <p class="section-label">Call Volume</p>
       <div class="slider-row">
@@ -291,11 +257,6 @@
         <div class="slider-label">Maple cost per location/month<small>Pilot rate $240; full rollout rate $240</small></div>
         <div class="slider-track"><input type="range" min="100" max="400" step="10" value="240" id="mapleCost" oninput="update()"></div>
         <span class="slider-val" id="mapleCostOut">$240/mo</span>
-      </div>
-      <div class="slider-row">
-        <div class="slider-label">Number of locations<small id="locNote">Pilot: start with 3–5 to prove ROI</small></div>
-        <div class="slider-track"><input type="range" min="1" max="5" step="1" value="3" id="locs" oninput="update()"></div>
-        <span class="slider-val" id="locsOut">3 locations</span>
       </div>
     </div>
 
@@ -358,29 +319,6 @@
     function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
     function fmtK(n) { return fmt(n); }
 
-    var mode = 'pilot';
-
-    function setMode(m) {
-      mode = m;
-      var btns = document.querySelectorAll('#modeToggle button');
-      btns[0].className = m === 'pilot' ? 'active' : '';
-      btns[1].className = m === 'full' ? 'active' : '';
-      var locsSlider = document.getElementById('locs');
-      var costSlider = document.getElementById('mapleCost');
-      if (m === 'pilot') {
-        locsSlider.max = 5;
-        locsSlider.value = Math.min(locsSlider.value, 5);
-        costSlider.value = 240;
-        document.getElementById('locNote').textContent = 'Pilot: start with 3–5 to prove ROI';
-      } else {
-        locsSlider.max = 29;
-        locsSlider.value = 29;
-        costSlider.value = 240;
-        document.getElementById('locNote').textContent = 'Full rollout across all locations';
-      }
-      update();
-    }
-
     function update() {
       var calls = +document.getElementById('calls').value;
       var miss = +document.getElementById('miss').value / 100;
@@ -389,7 +327,7 @@
       var catTicket = +document.getElementById('catTicket').value;
       var catPct = +document.getElementById('catPct').value / 100;
       var mapleCost = +document.getElementById('mapleCost').value;
-      var locs = +document.getElementById('locs').value;
+      var locs = 29;
 
       document.getElementById('callsOut').textContent = calls + ' calls';
       document.getElementById('missOut').textContent = Math.round(miss * 100) + '%';
@@ -398,7 +336,6 @@
       document.getElementById('catTicketOut').textContent = '$' + catTicket;
       document.getElementById('catPctOut').textContent = Math.round(catPct * 100) + '%';
       document.getElementById('mapleCostOut').textContent = '$' + mapleCost + '/mo';
-      document.getElementById('locsOut').textContent = locs + (locs === 1 ? ' location' : ' locations');
 
       var blended = (1 - catPct) * regTicket + catPct * catTicket;
       var missedCallsDay = calls * miss;
@@ -415,7 +352,7 @@
       document.getElementById('r_blended').textContent = '$' + blended.toFixed(0);
       document.getElementById('r_revLoc').textContent = fmtK(revPerMonth);
       document.getElementById('r_roi').textContent = roi.toFixed(0) + 'x';
-      document.getElementById('systemLabel').textContent = 'Results — System-Wide (' + locs + (locs === 1 ? ' Location' : ' Locations') + ')';
+      document.getElementById('systemLabel').textContent = 'Results — System-Wide (29 Locations)';
       document.getElementById('r_sysRev').textContent = fmtK(sysRev);
       document.getElementById('r_sysRevSub').textContent = locs + (locs === 1 ? ' location' : ' locations') + ' × ' + fmtK(revPerMonth);
       document.getElementById('r_sysCost').textContent = fmtK(sysCost);
