@@ -288,9 +288,9 @@
     <div class="panel">
       <p class="section-label">Maple Cost</p>
       <div class="slider-row">
-        <div class="slider-label">Maple cost per location/month<small>Pilot rate $200; full rollout rate $240</small></div>
-        <div class="slider-track"><input type="range" min="100" max="400" step="10" value="200" id="mapleCost" oninput="update()"></div>
-        <span class="slider-val" id="mapleCostOut">$200/mo</span>
+        <div class="slider-label">Maple cost per location/month<small>Pilot rate $240; full rollout rate $240</small></div>
+        <div class="slider-track"><input type="range" min="100" max="400" step="10" value="240" id="mapleCost" oninput="update()"></div>
+        <span class="slider-val" id="mapleCostOut">$240/mo</span>
       </div>
       <div class="slider-row">
         <div class="slider-label">Number of locations<small id="locNote">Pilot: start with 3–5 to prove ROI</small></div>
@@ -356,7 +356,7 @@
 
   <script>
     function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
-    function fmtK(n) { return n >= 1000 ? '$' + (n / 1000).toFixed(0) + 'K' : fmt(n); }
+    function fmtK(n) { return fmt(n); }
 
     var mode = 'pilot';
 
@@ -370,7 +370,7 @@
       if (m === 'pilot') {
         locsSlider.max = 5;
         locsSlider.value = Math.min(locsSlider.value, 5);
-        costSlider.value = 200;
+        costSlider.value = 240;
         document.getElementById('locNote').textContent = 'Pilot: start with 3–5 to prove ROI';
       } else {
         locsSlider.max = 29;
