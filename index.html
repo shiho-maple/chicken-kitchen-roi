@@ -253,6 +253,18 @@
 
     <div class="panel">
       <p class="section-label">Maple Cost</p>
+      <div class="results-grid">
+        <div class="stat-card">
+          <p class="stat-label">Cost per location/month<br>&nbsp;</p>
+          <p class="stat-val">$240</p>
+          <p class="stat-sub">flat, no hidden fees</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Total monthly cost<br>(29 locations)</p>
+          <p class="stat-val">$6,960</p>
+          <p class="stat-sub">29 × $240</p>
+        </div>
+      </div>
     </div>
 
     <div class="panel">
@@ -290,17 +302,17 @@
           <p class="stat-sub" id="r_sysRevSub">—</p>
         </div>
         <div class="stat-card accent">
-          <p class="stat-label">Maple cost/month</p>
-          <p class="stat-val" id="r_sysCost">—</p>
-          <p class="stat-sub">flat, no hidden fees</p>
-        </div>
-<div class="stat-card accent">
-          <p class="stat-label">Annual revenue at risk</p>
+          <p class="stat-label">Annual revenue at risk<br>&nbsp;</p>
           <p class="stat-val" id="r_annual">—</p>
           <p class="stat-sub">if nothing changes</p>
         </div>
         <div class="stat-card accent">
-          <p class="stat-label">ROI of Maple</p>
+          <p class="stat-label">Maple cost/month<br>&nbsp;</p>
+          <p class="stat-val" id="r_sysCost">—</p>
+          <p class="stat-sub">flat, no hidden fees</p>
+        </div>
+        <div class="stat-card accent">
+          <p class="stat-label">ROI of Maple<br>&nbsp;</p>
           <p class="stat-val" id="r_sysRoi">—</p>
           <p class="stat-sub">missed revenue ÷ Maple cost</p>
         </div>
@@ -350,7 +362,6 @@
       document.getElementById('r_sysRev').textContent = fmtK(sysRev);
       document.getElementById('r_sysRevSub').textContent = locs + (locs === 1 ? ' location' : ' locations') + ' × ' + fmtK(revPerMonth);
       document.getElementById('r_sysCost').textContent = fmtK(sysCost);
-      document.getElementById('r_sysNet').textContent = fmtK(sysNet);
       document.getElementById('r_annual').textContent = fmtK(annual);
       document.getElementById('r_sysRoi').textContent = (sysRev / sysCost).toFixed(0) + 'x';
     }
