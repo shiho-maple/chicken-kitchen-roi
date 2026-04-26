@@ -296,7 +296,7 @@
         </div>
         <div class="stat-card accent">
           <p class="stat-label">Annual revenue at risk<br>&nbsp;</p>
-          <p class="stat-val-sm" id="r_annual">—</p>
+          <p class="stat-val" id="r_annual">—</p>
           <p class="stat-sub">if nothing changes</p>
         </div>
         <div class="stat-card accent">
@@ -318,6 +318,7 @@
   <script>
     function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
     function fmtK(n) { return fmt(n); }
+    function fmtM(n) { return n >= 1000000 ? '$' + (n / 1000000).toFixed(3) + 'M' : n >= 1000 ? '$' + (n / 1000).toFixed(1) + 'K' : fmt(n); }
 
     function update() {
       var calls = +document.getElementById('calls').value;
@@ -355,7 +356,7 @@
       document.getElementById('r_sysRev').textContent = fmtK(sysRev);
       document.getElementById('r_sysRevSub').textContent = locs + (locs === 1 ? ' location' : ' locations') + ' × ' + fmtK(revPerMonth);
       document.getElementById('r_sysCost').textContent = fmtK(sysCost);
-      document.getElementById('r_annual').textContent = fmtK(annual);
+      document.getElementById('r_annual').textContent = fmtM(annual);
       document.getElementById('r_sysRoi').textContent = (sysRev / sysCost).toFixed(0) + 'x';
     }
 
