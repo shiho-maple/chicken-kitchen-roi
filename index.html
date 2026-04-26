@@ -189,6 +189,15 @@
 
     .stat-card.accent .stat-sub { color: #818CF8; }
 
+    .stat-val-sm {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-card.accent .stat-val-sm { color: #4B5EFF; }
+
     .footnote {
       font-size: 12px;
       color: #9CA3AF;
@@ -252,22 +261,6 @@
     </div>
 
     <div class="panel">
-      <p class="section-label">Maple Cost</p>
-      <div class="results-grid">
-        <div class="stat-card">
-          <p class="stat-label">Cost per location/month<br>&nbsp;</p>
-          <p class="stat-val">$240</p>
-          <p class="stat-sub">flat, no hidden fees</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Total monthly cost<br>(29 locations)</p>
-          <p class="stat-val">$6,960</p>
-          <p class="stat-sub">29 × $240</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
       <p class="section-label">Results — Per Location, Per Month</p>
       <div class="results-grid">
         <div class="stat-card">
@@ -303,11 +296,11 @@
         </div>
         <div class="stat-card accent">
           <p class="stat-label">Annual revenue at risk<br>&nbsp;</p>
-          <p class="stat-val" id="r_annual">—</p>
+          <p class="stat-val-sm" id="r_annual">—</p>
           <p class="stat-sub">if nothing changes</p>
         </div>
         <div class="stat-card accent">
-          <p class="stat-label">Maple cost/month<br>&nbsp;</p>
+          <p class="stat-label">Maple cost/month<br>($240/location)</p>
           <p class="stat-val" id="r_sysCost">—</p>
           <p class="stat-sub">flat, no hidden fees</p>
         </div>
