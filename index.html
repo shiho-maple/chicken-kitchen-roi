@@ -1,0 +1,211 @@
+<style>
+.ck-wrap { padding: 1.5rem 0; font-family: var(--font-sans); }
+.section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary); margin: 0 0 12px; }
+.slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.slider-label { font-size: 13px; color: var(--color-text-secondary); width: 220px; flex-shrink: 0; line-height: 1.4; }
+.slider-label small { display: block; font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.slider-row input[type=range] { flex: 1; }
+.slider-val { font-size: 13px; font-weight: 500; color: var(--color-text-primary); min-width: 64px; text-align: right; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 1.5rem 0 0; }
+.card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+.card-label { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 4px; line-height: 1.3; }
+.card-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin: 0; line-height: 1.2; }
+.card-sub { font-size: 11px; color: var(--color-text-tertiary); margin: 3px 0 0; }
+.card.accent { background: var(--color-background-info); }
+.card.accent .card-label { color: var(--color-text-info); }
+.card.accent .card-val { color: var(--color-text-info); }
+.card.accent .card-sub { color: var(--color-text-info); opacity: 0.7; }
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+.assumption-note { font-size: 12px; color: var(--color-text-tertiary); line-height: 1.6; margin: 4px 0 0; }
+.toggle-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.toggle-row label { font-size: 13px; color: var(--color-text-secondary); cursor: pointer; }
+.pilot-toggle { display: flex; gap: 0; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 20px; width: fit-content; }
+.pilot-toggle button { border: none; background: transparent; padding: 6px 16px; font-size: 13px; cursor: pointer; color: var(--color-text-secondary); }
+.pilot-toggle button.active { background: var(--color-background-secondary); color: var(--color-text-primary); font-weight: 500; }
+</style>
+
+<div class="ck-wrap">
+  <h2 class="sr-only">Chicken Kitchen × Maple — ROI calculator</h2>
+
+  <div class="pilot-toggle" id="modeToggle">
+    <button class="active" onclick="setMode('pilot')">Pilot (3–5 locations)</button>
+    <button onclick="setMode('full')">Full rollout (29 locations)</button>
+  </div>
+
+  <p class="section-label">Call volume</p>
+
+  <div class="slider-row">
+    <div class="slider-label">Avg calls/day per location<small>Source: your audit data — high-vol stores avg 50+, conservative default 30</small></div>
+    <input type="range" min="5" max="100" step="1" value="30" id="calls" oninput="update()">
+    <span class="slider-val" id="callsOut">30 calls</span>
+  </div>
+
+  <div class="slider-row">
+    <div class="slider-label">Miss rate<small>Source: mystery shopper audit Apr 23–24 — 48% Thu, 38% Fri, avg 43%</small></div>
+    <input type="range" min="5" max="80" step="1" value="43" id="miss" oninput="update()">
+    <span class="slider-val" id="missOut">43%</span>
+  </div>
+
+  <div class="slider-row">
+    <div class="slider-label">% of missed calls that were orders<small>Industry assumption — some calls are spam, questions, wrong numbers</small></div>
+    <input type="range" min="20" max="90" step="1" value="65" id="orderPct" oninput="update()">
+    <span class="slider-val" id="orderPctOut">65%</span>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">Ticket size (blended model)</p>
+
+  <div class="slider-row">
+    <div class="slider-label">Regular order avg ticket<small>Fast-casual benchmark; phone orders skew slightly higher than walk-in</small></div>
+    <input type="range" min="8" max="50" step="1" value="16" id="regTicket" oninput="update()">
+    <span class="slider-val" id="regTicketOut">$16</span>
+  </div>
+
+  <div class="slider-row">
+    <div class="slider-label">Catering order avg ticket<small>Chicken Kitchen catering starts at ~$80; avg order likely $100–140</small></div>
+    <input type="range" min="60" max="300" step="5" value="120" id="catTicket" oninput="update()">
+    <span class="slider-val" id="catTicketOut">$120</span>
+  </div>
+
+  <div class="slider-row">
+    <div class="slider-label">Catering % of order calls<small>Assumption — catering tends to come in by phone disproportionately</small></div>
+    <input type="range" min="5" max="60" step="1" value="30" id="catPct" oninput="update()">
+    <span class="slider-val" id="catPctOut">30%</span>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">Maple cost</p>
+
+  <div class="slider-row">
+    <div class="slider-label">Maple cost per location/month<small>Pilot rate $200; full rollout rate $240</small></div>
+    <input type="range" min="100" max="400" step="10" value="200" id="mapleCost" oninput="update()">
+    <span class="slider-val" id="mapleCostOut">$200/mo</span>
+  </div>
+
+  <div class="slider-row">
+    <div class="slider-label">Number of locations<small id="locNote">Pilot: start with 3–5 to prove ROI</small></div>
+    <input type="range" min="1" max="29" step="1" value="3" id="locs" oninput="update()">
+    <span class="slider-val" id="locsOut">3 locations</span>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">Results — per location, per month</p>
+  <div class="cards">
+    <div class="card">
+      <p class="card-label">Missed calls/day</p>
+      <p class="card-val" id="r_missedCalls">—</p>
+      <p class="card-sub">per location</p>
+    </div>
+    <div class="card">
+      <p class="card-label">Blended ticket size</p>
+      <p class="card-val" id="r_blended">—</p>
+      <p class="card-sub">weighted avg</p>
+    </div>
+    <div class="card">
+      <p class="card-label">Revenue at risk/mo</p>
+      <p class="card-val" id="r_revLoc">—</p>
+      <p class="card-sub">per location</p>
+    </div>
+    <div class="card">
+      <p class="card-label">ROI multiple</p>
+      <p class="card-val" id="r_roi">—</p>
+      <p class="card-sub">return on Maple spend</p>
+    </div>
+  </div>
+
+  <p class="section-label" style="margin-top: 1.5rem;" id="systemLabel">Results — system-wide (3 locations)</p>
+  <div class="cards">
+    <div class="card accent">
+      <p class="card-label">Monthly revenue at risk</p>
+      <p class="card-val" id="r_sysRev">—</p>
+      <p class="card-sub" id="r_sysRevSub">—</p>
+    </div>
+    <div class="card accent">
+      <p class="card-label">Maple cost/month</p>
+      <p class="card-val" id="r_sysCost">—</p>
+      <p class="card-sub">flat, no hidden fees</p>
+    </div>
+    <div class="card accent">
+      <p class="card-label">Net recovery/month</p>
+      <p class="card-val" id="r_sysNet">—</p>
+      <p class="card-sub">revenue recovered minus cost</p>
+    </div>
+    <div class="card accent">
+      <p class="card-label">Annual revenue at risk</p>
+      <p class="card-val" id="r_annual">—</p>
+      <p class="card-sub">if nothing changes</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function fmtK(n) { return n >= 1000 ? '$' + (n/1000).toFixed(0) + 'K' : fmt(n); }
+
+var mode = 'pilot';
+
+function setMode(m) {
+  mode = m;
+  var btns = document.querySelectorAll('#modeToggle button');
+  btns[0].className = m === 'pilot' ? 'active' : '';
+  btns[1].className = m === 'full' ? 'active' : '';
+  var locsSlider = document.getElementById('locs');
+  var costSlider = document.getElementById('mapleCost');
+  if (m === 'pilot') {
+    locsSlider.value = Math.min(locsSlider.value, 5);
+    locsSlider.max = 5;
+    costSlider.value = 200;
+    document.getElementById('locNote').textContent = 'Pilot: start with 3–5 to prove ROI';
+  } else {
+    locsSlider.max = 29;
+    locsSlider.value = 29;
+    costSlider.value = 240;
+    document.getElementById('locNote').textContent = 'Full rollout across all locations';
+  }
+  update();
+}
+
+function update() {
+  var calls = +document.getElementById('calls').value;
+  var miss = +document.getElementById('miss').value / 100;
+  var orderPct = +document.getElementById('orderPct').value / 100;
+  var regTicket = +document.getElementById('regTicket').value;
+  var catTicket = +document.getElementById('catTicket').value;
+  var catPct = +document.getElementById('catPct').value / 100;
+  var mapleCost = +document.getElementById('mapleCost').value;
+  var locs = +document.getElementById('locs').value;
+
+  document.getElementById('callsOut').textContent = calls + ' calls';
+  document.getElementById('missOut').textContent = Math.round(miss*100) + '%';
+  document.getElementById('orderPctOut').textContent = Math.round(orderPct*100) + '%';
+  document.getElementById('regTicketOut').textContent = '$' + regTicket;
+  document.getElementById('catTicketOut').textContent = '$' + catTicket;
+  document.getElementById('catPctOut').textContent = Math.round(catPct*100) + '%';
+  document.getElementById('mapleCostOut').textContent = '$' + mapleCost + '/mo';
+  document.getElementById('locsOut').textContent = locs + (locs === 1 ? ' location' : ' locations');
+
+  var blended = (1 - catPct) * regTicket + catPct * catTicket;
+  var missedCallsDay = calls * miss;
+  var orderCallsDay = missedCallsDay * orderPct;
+  var revPerDay = orderCallsDay * blended;
+  var revPerMonth = revPerDay * 30;
+  var roi = revPerMonth / mapleCost;
+  var sysRev = revPerMonth * locs;
+  var sysCost = mapleCost * locs;
+  var sysNet = sysRev - sysCost;
+  var annual = sysRev * 12;
+
+  document.getElementById('r_missedCalls').textContent = missedCallsDay.toFixed(1);
+  document.getElementById('r_blended').textContent = '$' + blended.toFixed(0);
+  document.getElementById('r_revLoc').textContent = fmtK(revPerMonth);
+  document.getElementById('r_roi').textContent = roi.toFixed(0) + 'x';
+  document.getElementById('systemLabel').textContent = 'Results — system-wide (' + locs + (locs===1?' location':' locations') + ')';
+  document.getElementById('r_sysRev').textContent = fmtK(sysRev);
+  document.getElementById('r_sysRevSub').textContent = locs + (locs===1?' location':' locations') + ' × ' + fmtK(revPerMonth);
+  document.getElementById('r_sysCost').textContent = fmtK(sysCost);
+  document.getElementById('r_sysNet').textContent = fmtK(sysNet);
+  document.getElementById('r_annual').textContent = fmtK(annual);
+}
+
+update();
+</script>
