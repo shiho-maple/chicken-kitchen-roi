@@ -309,6 +309,11 @@
           <p class="stat-val" id="r_annual">—</p>
           <p class="stat-sub">if nothing changes</p>
         </div>
+        <div class="stat-card accent">
+          <p class="stat-label">ROI of Maple</p>
+          <p class="stat-val" id="r_sysRoi">—</p>
+          <p class="stat-sub">missed revenue ÷ Maple cost</p>
+        </div>
       </div>
       <p class="footnote">Assumes 30 operating days/month. Blended ticket is a weighted average of regular and catering orders. Revenue at risk represents the revenue lost on missed order calls — Maple answers every call, recovering that revenue for a flat monthly fee.</p>
     </div>
@@ -358,6 +363,7 @@
       document.getElementById('r_sysCost').textContent = fmtK(sysCost);
       document.getElementById('r_sysNet').textContent = fmtK(sysNet);
       document.getElementById('r_annual').textContent = fmtK(annual);
+      document.getElementById('r_sysRoi').textContent = (sysRev / sysCost).toFixed(0) + 'x';
     }
 
     update();
