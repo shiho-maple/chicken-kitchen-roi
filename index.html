@@ -253,11 +253,6 @@
 
     <div class="panel">
       <p class="section-label">Maple Cost</p>
-      <div class="slider-row">
-        <div class="slider-label">Maple cost per location/month<small>Pilot rate $240; full rollout rate $240</small></div>
-        <div class="slider-track"><input type="range" min="100" max="400" step="10" value="240" id="mapleCost" oninput="update()"></div>
-        <span class="slider-val" id="mapleCostOut">$240/mo</span>
-      </div>
     </div>
 
     <div class="panel">
@@ -326,7 +321,7 @@
       var regTicket = +document.getElementById('regTicket').value;
       var catTicket = +document.getElementById('catTicket').value;
       var catPct = +document.getElementById('catPct').value / 100;
-      var mapleCost = +document.getElementById('mapleCost').value;
+      var mapleCost = 240;
       var locs = 29;
 
       document.getElementById('callsOut').textContent = calls + ' calls';
@@ -335,7 +330,6 @@
       document.getElementById('regTicketOut').textContent = '$' + regTicket;
       document.getElementById('catTicketOut').textContent = '$' + catTicket;
       document.getElementById('catPctOut').textContent = Math.round(catPct * 100) + '%';
-      document.getElementById('mapleCostOut').textContent = '$' + mapleCost + '/mo';
 
       var blended = (1 - catPct) * regTicket + catPct * catTicket;
       var missedCallsDay = calls * miss;
